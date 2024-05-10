@@ -82,3 +82,22 @@ module use /project/project_462000432/modules/
 ```
 
 Then simply loading the module via `module load esmvaltool`.
+
+## ESMValTool build
+
+`esmvaltool` is built as a local Python package using the containerized `pip`, via `pip install -e .[develop]`;
+this means all dependencies are installed inside the conda container e.g.:
+
+```
+python -c "import esmvalcore; print(esmvalcore.__file__)"
+/LUMI_TYKKY_Buq2VlS/miniconda/envs/env1/lib/python3.11/site-packages/esmvalcore/__init__.py
+```
+
+but `esmvaltool` is actually built locally, on top of the container:
+
+```
+python -c "import esmvaltool; print(esmvaltool.__file__)"
+/pfs/lustrep1/projappl/project_462000432/ESMValTool_2.10.0dev/esmvaltool/__init__.py
+```
+
+This should be OK, since LUMI allow this for fairly simpl(er) packages.
