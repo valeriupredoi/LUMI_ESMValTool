@@ -101,3 +101,9 @@ python -c "import esmvaltool; print(esmvaltool.__file__)"
 ```
 
 This should be OK, since LUMI allow this for fairly simpl(er) packages.
+
+## Resources
+
+- [Python packages on LUMI](https://docs.lumi-supercomputer.eu/software/installing/python/)
+- [Containerized Conda on LUMI](https://docs.lumi-supercomputer.eu/software/installing/container-wrapper/)
+- [Modules on LUMI](https://docs.lumi-supercomputer.eu/runjobs/lumi_env/Lmod_modules)
