@@ -24,7 +24,7 @@ prepend_path("PATH","/users/valepredoi/.local/lib/python3.11/site-packages")
 
 since all it needs is a pointer to the containerized conda installation **and** the local `pip` installation.
 
-**NOTE** the reason why the first path prepend to `$PATH` is needed is to get the containerizzed conda in path (this is
+**NOTE** the reason why the first path prepend to `$PATH` is needed is to get the containerized conda in path (this is
 straightforward); the reason why the second path prepend is needed is to get the installation of ESMValTool package in path, this is an editable `pip-local` installation, that could be performed inside a top level/group-wide directory (using `-t DIR` option), but this is unfortunately unavailable with the current settings of containerized conda on LUMI, that performs environment creation and activation at user level (running `pip install -t DIR .[develop]` will not find the conda-installed dependencies); ideally this installation should be nested directly inside the conda container. For now it's OK, we should aim to have it at container-level for a stable, central installation.
 
 Installed software: ESMValTool:`main` (v2.10.0dev state at 9 May 2024), with the following versions:
@@ -46,8 +46,10 @@ Once you loaded the module, you can now run `esmvaltool` as any other executable
 
 ```
 
+### User configuration file (`config-user.yml`)
+
 To be able to run the Tool, you will need a configuration file in either `~/.esmvaltool/config-user.yml` or elsewhere, but
-specifiend at command runtime via the `--config_file $PATH` option. A config file ready for running is found in `/project/project_462000432/esmvaltool_configuration_files`.
+specifiend at command runtime via the `--config_file $PATH` option. A config file ready for running is found in `/project/project_462000432/esmvaltool_configuration_files`. You can create your own `~/.esmvaltool` directory, and put that file in there.
 
 **NOTE**: there is currently no CMIP/OBS data available, so the Tool will download data in the designated dirs in `config-user.yml`, so be careful
 with disk usage!
