@@ -19,9 +19,13 @@ The current module is very basic:
    /project/project_462000432/modules/esmvaltool/2.10.lua:
 -------------------------------------------------------------------------------------------------------------------------------------------------
 prepend_path("PATH","/project/project_462000432/miniconda-container/bin")
+prepend_path("PATH","/users/valepredoi/.local/lib/python3.11/site-packages")
 ```
 
-since all it needs is a pointer to the containerized conda installation.
+since all it needs is a pointer to the containerized conda installation **and** the local `pip` installation.
+
+**NOTE** the reason why the first path prepend to `$PATH` is needed is to get the containerizzed conda in path (this is
+straightforward); the reason why the second path prepend is needed is to get the installation of ESMValTool package in path, this is an editable `pip-local` installation, that could be performed inside a top level/group-wide directory (using `-t DIR` option), but this is unfortunately unavailable with the current settings of containerized conda on LUMI, that performs environment creation and activation at user level (running `pip install -t DIR .[develop]` will not find the conda-installed dependencies); ideally this installation should be nested directly inside the conda container. For now it's OK, we should aim to have it at container-level for a stable, central installation.
 
 Installed software: ESMValTool:`main` (v2.10.0dev state at 9 May 2024), with the following versions:
 
