@@ -102,23 +102,6 @@ group reads.
 
 # Dev space
 
-## Installation
-
-Installation via containerized conda `conda-containerize`,
-based on [LUMI instructions](https://docs.lumi-supercomputer.eu/software/installing/container-wrapper/)
-
-
-## Steps
-
-```
-module load LUMI
-module load lumi-container-wrapper
-conda-containerize new --mamba --prefix miniconda-container/ ESMValTool_2.10.0dev/environment.yml
-export PATH="/project/project_462000432/miniconda-container/bin:$PATH"
-cd ESMValTool_2.10.0dev
-pip install -e .[develop]
-```
-
 ## Module loading
 
 Local (to project) built mini-module is avialbale via loading the local project path:
@@ -129,24 +112,28 @@ module use /project/project_462000432/modules/
 
 Then simply loading the module via `module load esmvaltool`.
 
-## ESMValTool build
 
-`esmvaltool` is built as a local Python package using the containerized `pip`, via `pip install -e .[develop]`;
-this means all dependencies are installed inside the conda container e.g.:
+## ESMValTool build on `project_462000432`
+
+`esmvaltool` is built as a pure conda package; this means all dependencies are installed inside the conda container e.g.:
 
 ```
 python -c "import esmvalcore; print(esmvalcore.__file__)"
-/LUMI_TYKKY_Buq2VlS/miniconda/envs/env1/lib/python3.11/site-packages/esmvalcore/__init__.py
-```
+/LUMI_TYKKY_D1Npoag/miniconda/envs/env1/lib/python3.11/site-packages/esmvalcore/__init__.py
 
-but `esmvaltool` is actually built locally, on top of the container:
-
-```
 python -c "import esmvaltool; print(esmvaltool.__file__)"
-/pfs/lustrep1/projappl/project_462000432/ESMValTool_2.10.0dev/esmvaltool/__init__.py
+/LUMI_TYKKY_D1Npoag/miniconda/envs/env1/lib/python3.11/site-packages/esmvaltool/__init__.py
 ```
 
-This should be OK, since LUMI allow this for fairly simpl(er) packages.
+Build steps:
+
+- create an `env_210.yml` to hold just `esmvaltool` as dependency
+- run the containerized conda env builder: `conda-containerize new --mamba --prefix miniconda-container env_210.yml`
+- export path: `export PATH="/project/project_462000432/miniconda-container/bin:$PATH"`
+- make sure no leftover local pip installs in `$HOME/.local`
+
+Updating an environment via a command can be done with: `conda-containerize update miniconda-container --post-install postinstall_esmvaltool`
+with `postinstall_esmvaltool` a file that may contain eg `mamba install -c conda-forge some-package`; note that this may result in conflicts, just as normal conda was used!
 
 ## Resources
 
