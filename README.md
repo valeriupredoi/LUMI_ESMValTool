@@ -1,8 +1,9 @@
 # User space
 
-## Summary
+## Project-wide ESMValTool
 
-Accessing ESMValTool on LUMI is easy, all you need to do is to
+Accessing ESMValTool on LUMI is easy, if you are a member of project `project_462000432`, and have
+access to `/project/project_462000432/`. All you need to do is to
 add the local module's path to the existing module infrastructure, then just
 load the `esmvaltool` module:
 
@@ -19,21 +20,21 @@ The current module is very basic:
    /project/project_462000432/modules/esmvaltool/2.10.lua:
 -------------------------------------------------------------------------------------------------------------------------------------------------
 prepend_path("PATH","/project/project_462000432/miniconda-container/bin")
-prepend_path("PATH","/users/valepredoi/.local/lib/python3.11/site-packages")
+
 ```
 
-since all it needs is a pointer to the containerized conda installation **and** the local `pip` installation.
+since all it needs is a pointer to the containerized conda installation.
 
-**NOTE** the reason why the first path prepend to `$PATH` is needed is to get the containerized conda in path (this is
-straightforward); the reason why the second path prepend is needed is to get the installation of ESMValTool package in path, this is an editable `pip-local` installation, that could be performed inside a top level/group-wide directory (using `-t DIR` option), but this is unfortunately unavailable with the current settings of containerized conda on LUMI, that performs environment creation and activation at user level (running `pip install -t DIR .[develop]` will not find the conda-installed dependencies); ideally this installation should be nested directly inside the conda container. For now it's OK, we should aim to have it at container-level for a stable, central installation.
 
-Installed software: ESMValTool:`main` (v2.10.0dev state at 9 May 2024), with the following versions:
+Installed software: ESMValTool:`main` (v2.10 stable tag), with the following versions:
 
 ```
 ~> esmvaltool version
 ESMValCore: 2.10.0
-ESMValTool: 2.11.0.dev71+g85e24b535
+ESMValTool: 2.10.0
 ```
+
+The installation is pure conda-forge. You can use the `conda-list` executable to examine the dependency environment.
 
 ## Running esmvaltool
 
@@ -59,6 +60,45 @@ Once configuration is completed, you can run e.g. an example recipe:
 ```
 esmvaltool run examples/recipe_python.yml
 ```
+
+## User editable installation of ESMValTool
+
+You can use the provided `conda-containerized` infrastructure to install your own copy of ESMValTool;
+such installation would be in editable, development mode, so you can perform changes inside the ESMValTool's
+source code, for development purposes. Installation uses containerized conda `conda-containerize`,
+based on [LUMI instructions](https://docs.lumi-supercomputer.eu/software/installing/container-wrapper/)
+
+First, load the relevant LUMI modules:
+
+```
+module load LUMI
+module load lumi-container-wrapper
+```
+
+Then `mkdir miniconda-container` where the environment will be linked to,
+the create the containerized conda environment based on ESMValTool's `environment.yml`:
+
+```
+conda-containerize new --mamba --prefix miniconda-container/ ESMValTool/environment.yml
+```
+
+Once that completed, prepend the new path:
+
+```
+export PATH="/project/project_462000432/miniconda-container/bin:$PATH"
+```
+
+(this is somwhat equivalent to `conda activate esmvaltool`), and now you can use the containerized `pip`
+to install esmvaltool in user editable, development mode:
+
+```
+cd ESMValTool_2.10.0dev
+pip install -e .[develop]
+```
+
+This installation will be placed in your `$HOME/.local` dir and will be sitting on top of the container;
+be advised that your `$HOME` dir is not readable by other users, and on LUMI you can not open it for
+group reads.
 
 # Dev space
 
