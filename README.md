@@ -3,7 +3,7 @@
 ## Project-wide ESMValTool
 
 Accessing ESMValTool on LUMI is easy, if you are a member of project `project_462000432`, and have
-access to `/project/project_462000432/`. All you need to do is to
+access to the project's shared directory `/project/project_462000432/`. All you need to do is to
 add the local module's path to the existing module infrastructure, then just
 load the `esmvaltool` module:
 
@@ -38,7 +38,7 @@ The installation is pure conda-forge. You can use the `conda-list` executable to
 
 ## Running esmvaltool
 
-Once you loaded the module, you can now run `esmvaltool` as any other executable
+Once you have loaded the module, you can now run `esmvaltool` as any other executable
 
 ```
 ~> which esmvaltool
@@ -50,7 +50,9 @@ Once you loaded the module, you can now run `esmvaltool` as any other executable
 ### User configuration file (`config-user.yml`)
 
 To be able to run the Tool, you will need a configuration file in either `~/.esmvaltool/config-user.yml` or elsewhere, but
-specifiend at command runtime via the `--config_file $PATH` option. A config file ready for running is found in `/project/project_462000432/esmvaltool_configuration_files`. You can create your own `~/.esmvaltool` directory, and put that file in there.
+specified at command line runtime via the `--config_file $PATH-TO-CONFIG` option. A config file ready for running
+is found in `/project/project_462000432/esmvaltool_configuration_files`.
+You can create your own `~/.esmvaltool` directory, and put that file in there.
 
 **NOTE**: there is currently no CMIP/OBS data available, so the Tool will download data in the designated dirs in `config-user.yml`, so be careful
 with disk usage!
@@ -64,8 +66,8 @@ esmvaltool run examples/recipe_python.yml
 ## User editable installation of ESMValTool
 
 You can use the provided `conda-containerized` infrastructure to install your own copy of ESMValTool;
-such installation would be in editable, development mode, so you can perform changes inside the ESMValTool's
-source code, for development purposes. Installation uses containerized conda `conda-containerize`,
+such installation would be built in editable, development mode, so you can perform changes inside ESMValTool's
+source code, for development purposes. The installation uses containerized conda `conda-containerize`,
 based on [LUMI instructions](https://docs.lumi-supercomputer.eu/software/installing/container-wrapper/)
 
 First, load the relevant LUMI modules:
@@ -83,7 +85,10 @@ git clone https://github.com/ESMValGroup/ESMValTool.git
 conda-containerize new --mamba --prefix miniconda-container/ ESMValTool/environment.yml
 ```
 
-Once that completed, prepend the new path:
+This will build a (containerized) conda environment populated with all the dependencies
+required by ESMValTool, and will do that using `mamba` as solver.
+
+Once that has completed, prepend the new path to your existng `$PATH` object:
 
 ```
 export PATH="/project/project_462000432/miniconda-container/bin:$PATH"
@@ -97,7 +102,7 @@ cd ESMValTool
 pip install -e .[develop]
 ```
 
-This installation will be placed in your `$HOME/.local` dir and will be sitting on top of the container;
+This installation will always be placed in your `$HOME/.local` directory, and will be sitting on top of the container;
 be advised that your `$HOME` dir is not readable by other users, and on LUMI you can not open it for
 group reads.
 
