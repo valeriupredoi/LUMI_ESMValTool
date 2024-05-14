@@ -75,7 +75,7 @@ module load LUMI
 module load lumi-container-wrapper
 ```
 
-Then `mkdir miniconda-container` where the environment will be linked to,
+Then `cd $HOME && mkdir miniconda-container` where the environment will be linked to,
 the create the containerized conda environment based on ESMValTool's `environment.yml`:
 
 ```
