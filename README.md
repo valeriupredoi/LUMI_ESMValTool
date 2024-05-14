@@ -26,7 +26,7 @@ prepend_path("PATH","/project/project_462000432/miniconda-container/bin")
 since all it needs is a pointer to the containerized conda installation.
 
 
-Installed software: ESMValTool:`main` (v2.10 stable tag), with the following versions:
+Installed software: ESMValTool:`v2.10.x` branch (v2.10 stable tag), with the following versions:
 
 ```
 ~> esmvaltool version
@@ -79,6 +79,7 @@ Then `mkdir miniconda-container` where the environment will be linked to,
 the create the containerized conda environment based on ESMValTool's `environment.yml`:
 
 ```
+git clone https://github.com/ESMValGroup/ESMValTool.git
 conda-containerize new --mamba --prefix miniconda-container/ ESMValTool/environment.yml
 ```
 
@@ -92,7 +93,7 @@ export PATH="/project/project_462000432/miniconda-container/bin:$PATH"
 to install esmvaltool in user editable, development mode:
 
 ```
-cd ESMValTool_2.10.0dev
+cd ESMValTool
 pip install -e .[develop]
 ```
 
